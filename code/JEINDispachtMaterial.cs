@@ -5,6 +5,9 @@ using PX.Objects.IN;
 
 namespace PX.Objects.JE
 {
+    /// <summary>
+    /// Stores the inventory-material snapshot and requested dispatch quantity for a source order line.
+    /// </summary>
     // Persistent snapshot. Replaces the stable version projection.
     [Serializable]
     [PXCacheName("Dispacht Material")]

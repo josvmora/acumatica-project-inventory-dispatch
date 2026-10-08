@@ -6,10 +6,15 @@ using PX.Objects.IN.InventoryRelease;
 namespace PX.Objects.JE
 {
     // Runs for standard inventory releases, including release from processing screens.
+    /// <summary>Completes linked dispatches when their inventory issues are released.</summary>
+    /// <remarks>Autor: Jose Vivanco; GitHub: josvmora; Fecha: Octubre 2026.</remarks>
     public class JEDispachtINReleaseProcessExt : PXGraphExtension<INReleaseProcess>
     {
+        /// <summary>Indicates that this graph extension is active.</summary>
+        /// <returns><see langword="true"/> to enable dispatch completion on issue release.</returns>
         public static bool IsActive() { return true; }
 
+        /// <summary>Checks released inventory documents and advances associated dispatches.</summary>
         protected virtual void INRegister_RowPersisted(PXCache sender, PXRowPersistedEventArgs e)
         {
             var issue = e.Row as INRegister;

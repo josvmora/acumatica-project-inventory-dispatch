@@ -17,6 +17,8 @@ namespace PX.Objects.JE
         private bool undoingDispatch;
         private bool changingStatus;
 
+        /// <summary>Determines whether the current dispatch has linked inventory issues.</summary>
+        /// <returns><see langword="true"/> if at least one issue link exists.</returns>
         private bool HasIssues()
         {
             if (string.IsNullOrEmpty(Document.Current?.DispachtNbr)) return false;
@@ -25,6 +27,9 @@ namespace PX.Objects.JE
                 .SelectWindowed(this, 0, 1, Document.Current.DispachtNbr).Count != 0;
         }
 
+        /// <summary>Checks whether all linked issues allow an in-progress dispatch to be undone.</summary>
+        /// <param name="dispatch">The dispatch to validate.</param>
+        /// <returns><see langword="true"/> if every linked issue is an unreleased issue on hold.</returns>
         private bool CanUndoDispatch(JEDispacht dispatch)
         {
             if (!IsSavedDispatch(dispatch) || dispatch.Status != JEDispachtStatus.Dispatching)
@@ -52,6 +57,9 @@ namespace PX.Objects.JE
 
         // Project/task fields can be supplied by the project inventory DAC extensions.
         // Resolve through the cache, which includes extension fields; never guess a location.
+        /// <summary>Reads the project identifier assigned to an inventory location.</summary>
+        /// <param name="location">The inventory location to inspect.</param>
+        /// <returns>The assigned project identifier, if present.</returns>
         private int? LocationProject(INLocation location)
         {
             PXCache cache = Caches[typeof(INLocation)];
@@ -60,6 +68,9 @@ namespace PX.Objects.JE
             return cache.GetValue(location, "ProjectID") as int?;
         }
 
+        /// <summary>Finds the unique active project location for a warehouse.</summary>
+        /// <param name="siteID">The warehouse identifier.</param>
+        /// <returns>The active location assigned to the dispatch project.</returns>
         private INLocation ResolveLocation(int? siteID)
         {
             if (siteID == null || Document.Current?.ProjectID == null)
@@ -79,6 +90,18 @@ namespace PX.Objects.JE
             return found;
         }
 
+        /// <summary>Creates a material snapshot for a stock item from a source order line.</summary>
+        /// <param name="parent">The dispatch source-order line.</param>
+        /// <param name="sourceLine">The source order line number.</param>
+        /// <param name="inventoryID">The inventory item identifier.</param>
+        /// <param name="subItemID">The inventory subitem identifier.</param>
+        /// <param name="descr">The source line description.</param>
+        /// <param name="qty">The source order quantity.</param>
+        /// <param name="uom">The source quantity unit of measure.</param>
+        /// <param name="siteID">The source warehouse identifier.</param>
+        /// <param name="taskID">The source project task identifier.</param>
+        /// <param name="costCodeID">The source project cost code identifier.</param>
+        /// <returns>A material snapshot for a stock item; otherwise <see langword="null"/>.</returns>
         private JEINDispachtMaterial BuildMaterial(JEDispachtLine parent, int? sourceLine,
             int? inventoryID, int? subItemID, string descr, decimal? qty, string uom,
             int? siteID, int? taskID, int? costCodeID)
@@ -99,6 +122,9 @@ namespace PX.Objects.JE
             };
         }
 
+        /// <summary>Reads stock material lines from a purchase or sales order.</summary>
+        /// <param name="line">The dispatch line identifying the source order.</param>
+        /// <returns>The stock material snapshots found on the source order.</returns>
         private List<JEINDispachtMaterial> ReadOrderMaterials(JEDispachtLine line)
         {
             var rows = new List<JEINDispachtMaterial>();
@@ -135,6 +161,8 @@ namespace PX.Objects.JE
             return rows;
         }
 
+        /// <summary>Inserts any missing stock material snapshots for a dispatch line.</summary>
+        /// <param name="parent">The dispatch line whose source order is loaded.</param>
         private void LoadOrderMaterials(JEDispachtLine parent)
         {
             // Validate all source rows before inserting any snapshot for this order.
@@ -157,6 +185,7 @@ namespace PX.Objects.JE
         public PXAction<JEDispacht> LoadMaterials;
         [PXButton(CommitChanges = true, Category = "Processing")]
         [PXUIField(DisplayName = "Load Missing Materials", MapEnableRights = PXCacheRights.Update)]
+        /// <summary>Validates source orders and loads any missing material rows.</summary>
         protected virtual IEnumerable loadMaterials(PXAdapter adapter)
         {
             EnsureDispatchEditable();
@@ -172,6 +201,9 @@ namespace PX.Objects.JE
             return adapter.Get();
         }
 
+        /// <summary>Calculates available quantity in base units for a material location.</summary>
+        /// <param name="row">The material whose item, subitem, warehouse, and location are used.</param>
+        /// <returns>The nonnegative quantity that is both available and on hand.</returns>
         private decimal BaseAvailable(JEINDispachtMaterial row)
         {
             decimal available = 0m;
@@ -188,6 +220,7 @@ namespace PX.Objects.JE
             return Math.Max(0m, available);
         }
 
+        /// <summary>Calculates and displays available quantity in the material's unit of measure.</summary>
         protected virtual void JEINDispachtMaterial_AvailableQty_FieldSelecting(PXCache sender, PXFieldSelectingEventArgs e)
         {
             var row = e.Row as JEINDispachtMaterial;
@@ -196,9 +229,15 @@ namespace PX.Objects.JE
                 sender, row, row.UOM, BaseAvailable(row), INPrecision.QUANTITY);
         }
 
+        /// <summary>Builds the stock-dimension key used to aggregate material quantities.</summary>
+        /// <param name="row">The material row whose stock dimensions are used.</param>
+        /// <returns>A key composed of item, subitem, warehouse, and location identifiers.</returns>
         private static string StockKey(JEINDispachtMaterial row)
         { return string.Format("{0}|{1}|{2}|{3}", row.InventoryID, row.SubItemID, row.SiteID, row.LocationID); }
 
+        /// <summary>Validates requested quantities and returns the positive material rows.</summary>
+        /// <param name="replacement">An optional edited row to validate in place of its cached version.</param>
+        /// <returns>Rows with positive dispatch quantities after availability checks.</returns>
         private List<JEINDispachtMaterial> ValidateQuantities(JEINDispachtMaterial replacement = null)
         {
             var totals = new Dictionary<string, decimal>();
@@ -231,6 +270,7 @@ namespace PX.Objects.JE
             return positive;
         }
 
+        /// <summary>Validates an edited dispatch quantity against the current stock availability.</summary>
         protected virtual void JEINDispachtMaterial_DispatchQty_FieldVerifying(PXCache sender, PXFieldVerifyingEventArgs e)
         {
             EnsureDispatchEditable();
@@ -240,12 +280,14 @@ namespace PX.Objects.JE
             ValidateQuantities(copy);
         }
 
+        /// <summary>Allows material insertion only while loading from source orders.</summary>
         protected virtual void JEINDispachtMaterial_RowInserting(PXCache sender, PXRowInsertingEventArgs e)
         {
             EnsureDispatchEditable();
             if (!buildingMaterials) throw new PXException("Add materials through Add Documents.");
         }
 
+        /// <summary>Restricts material updates to the dispatch quantity and validates totals.</summary>
         protected virtual void JEINDispachtMaterial_RowUpdating(PXCache sender, PXRowUpdatingEventArgs e)
         {
             EnsureDispatchEditable();
@@ -259,9 +301,11 @@ namespace PX.Objects.JE
             ValidateQuantities(row);
         }
 
+        /// <summary>Prevents deleting material rows when the dispatch is not editable.</summary>
         protected virtual void JEINDispachtMaterial_RowDeleting(PXCache sender, PXRowDeletingEventArgs e)
         { EnsureDispatchEditable(); }
 
+        /// <summary>Validates a source order before it is inserted into dispatch details.</summary>
         protected virtual void JEDispachtLine_RowInserting(PXCache sender, PXRowInsertingEventArgs e)
         {
             EnsureDispatchEditable();
@@ -272,9 +316,11 @@ namespace PX.Objects.JE
             ReadOrderMaterials(line);
         }
 
+        /// <summary>Prevents deleting source-order lines when the dispatch is not editable.</summary>
         protected virtual void JEDispachtLine_RowDeleting(PXCache sender, PXRowDeletingEventArgs e)
         { EnsureDispatchEditable(); }
 
+        /// <summary>Prevents changing the identity of an existing source-order line.</summary>
         protected virtual void JEDispachtLine_RowUpdating(PXCache sender, PXRowUpdatingEventArgs e)
         {
             EnsureDispatchEditable();
@@ -283,6 +329,7 @@ namespace PX.Objects.JE
                     throw new PXException("Remove and add the source document instead of changing its reference.");
         }
 
+        /// <summary>Prevents direct status changes and edits to locked dispatch headers.</summary>
         protected virtual void JEDispacht_RowUpdating(PXCache sender, PXRowUpdatingEventArgs e)
         {
             var old = (JEDispacht)e.Row;
@@ -296,9 +343,11 @@ namespace PX.Objects.JE
                     throw new PXException("This dispatch is locked. Its header cannot be changed.");
         }
 
+        /// <summary>Prevents deleting a dispatch that is not editable.</summary>
         protected virtual void JEDispacht_RowDeleting(PXCache sender, PXRowDeletingEventArgs e)
         { EnsureDispatchEditable(); }
 
+        /// <summary>Validates dispatch locking and material quantities before persisting.</summary>
         public override void Persist()
         {
             if (!creatingIssues && IsSavedDispatch(Document.Current)
@@ -318,6 +367,7 @@ namespace PX.Objects.JE
         [PXButton(CommitChanges = true, DisplayOnMainToolbar = true, Category = "Processing",
             Connotation = PX.Data.WorkflowAPI.ActionConnotation.Success)]
         [PXUIField(DisplayName = "Dispatch and Release", MapEnableRights = PXCacheRights.Update)]
+        /// <summary>Creates inventory issues grouped by warehouse and starts their release.</summary>
         protected virtual IEnumerable dispatchDocuments(PXAdapter adapter)
         {
             var current = Document.Current;
@@ -412,6 +462,8 @@ namespace PX.Objects.JE
             return adapter.Get();
         }
 
+        /// <summary>Schedules release of the inventory issues linked to a dispatch.</summary>
+        /// <param name="dispachtNbr">The dispatch number whose linked issues are released.</param>
         private void QueueIssueRelease(string dispachtNbr)
         {
             PXLongOperation.StartOperation(this, delegate
@@ -420,6 +472,8 @@ namespace PX.Objects.JE
             });
         }
 
+        /// <summary>Loads and releases every inventory issue linked to a dispatch.</summary>
+        /// <param name="dispachtNbr">The dispatch number whose linked issues are released.</param>
         private static void ReleaseLinkedIssues(string dispachtNbr)
         {
             var graph = PXGraph.CreateInstance<JEDispachtEntry>();
@@ -458,6 +512,9 @@ namespace PX.Objects.JE
                 INDocumentRelease.ReleaseDoc(documents, false);
         }
 
+        /// <summary>Deletes all eligible linked issues and returns the dispatch to hold.</summary>
+        /// <param name="adapter">The action adapter.</param>
+        /// <returns>The adapter's dispatch rows after the operation.</returns>
         private IEnumerable UndoDispatchIssues(PXAdapter adapter)
         {
             var row = Document.Current;
@@ -558,6 +615,7 @@ namespace PX.Objects.JE
         // Called by the inventory release graph while its SQL transaction is open.
         // The status update serializes releases for the same dispatch and is rolled
         // back along with inventory when any validation or persistence fails.
+        /// <summary>Marks the dispatch complete after all linked issues are released and verified.</summary>
         public void CompleteFromReleasedIssues()
         {
             if (Document.Current?.Status != JEDispachtStatus.Dispatching) return;
@@ -589,6 +647,7 @@ namespace PX.Objects.JE
                 new PXDataFieldRestrict<JEDispacht.status>(JEDispachtStatus.Dispatching));
         }
 
+        /// <summary>Verifies that released issue lines still match the dispatch materials.</summary>
         private void EnsureIssuesReleased()
         {
             if (!HasIssues()) throw new PXException("Create and manually release the Issues before completing the dispatch.");
@@ -634,6 +693,7 @@ namespace PX.Objects.JE
         public PXAction<JEDispacht> ViewIssue;
         [PXButton]
         [PXUIField(DisplayName = "View Issue", MapEnableRights = PXCacheRights.Select)]
+        /// <summary>Opens the inventory issue currently selected in the Issues view.</summary>
         protected virtual IEnumerable viewIssue(PXAdapter adapter)
         {
             JEDispachtIssue link = Issues.Current;

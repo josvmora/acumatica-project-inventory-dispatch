@@ -5,6 +5,7 @@ using PX.Objects.PM;
 
 namespace PX.Objects.JE
 {
+    /// <summary>Stores the document type and order-number criteria for the Add Documents dialog.</summary>
     // Filter + selectable row used by the "Add Documents" dialog on JEDispachtEntry.
     // Only used to browse existing SOOrder/POOrder headers; nothing here is persisted to SO/PO.
 
@@ -31,6 +32,8 @@ namespace PX.Objects.JE
         #endregion
     }
 
+    /// <summary>Represents a selectable source order row in the Add Documents dialog.</summary>
+    /// <remarks>Autor: Jose Vivanco; GitHub: josvmora; Fecha: Octubre 2026.</remarks>
     [Serializable]
     [PXHidden]
     public class JEDispachtAddRow : PXBqlTable, IBqlTable

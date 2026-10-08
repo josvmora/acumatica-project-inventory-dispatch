@@ -10,14 +10,24 @@ using PX.Objects.GL;
 
 namespace PX.Objects.JE
 {
+  /// <summary>
+  /// Stores the dispatch header and its shipping, project, and audit information.
+  /// </summary>
+  /// <remarks>Autor: Jose Vivanco; GitHub: josvmora; Fecha: Octubre 2026.</remarks>
   [Serializable]
   [PXCacheName("JEDispacht")]
   [PXPrimaryGraph(typeof(JEDispachtEntry))]
   public class JEDispacht : PXBqlTable, IBqlTable
   {
     #region Keys
+    /// <summary>Defines the primary key for a dispatch.</summary>
+    /// <remarks>Autor: Jose Vivanco; GitHub: josvmora; Fecha: Octubre 2026.</remarks>
     public class PK : PrimaryKeyOf<JEDispacht>.By<dispachtNbr>
     {
+      /// <summary>Finds a dispatch by its dispatch number.</summary>
+      /// <param name="graph">The graph used to execute the query.</param>
+      /// <param name="dispachtNbr">The dispatch number to find.</param>
+      /// <returns>The matching dispatch, or <see langword="null"/> if none exists.</returns>
       public static JEDispacht Find(PXGraph graph, string dispachtNbr)
         => FindBy(graph, dispachtNbr);
     }
@@ -177,6 +187,8 @@ namespace PX.Objects.JE
     #endregion
   }
 
+  /// <summary>Defines dispatch status values and their selector labels.</summary>
+  /// <remarks>Autor: Jose Vivanco; GitHub: josvmora; Fecha: Octubre 2026.</remarks>
   public class JEDispachtStatus
   {
     public const string Hold = "H";
@@ -185,33 +197,51 @@ namespace PX.Objects.JE
     public const string Completed = "C";
     public const string Cancelled = "X";
 
+    /// <summary>BQL constant for the on-hold status.</summary>
+    /// <remarks>Autor: Jose Vivanco; GitHub: josvmora; Fecha: Octubre 2026.</remarks>
     public class hold : PX.Data.BQL.BqlString.Constant<hold>
     {
+      /// <summary>Initializes the constant with the on-hold status value.</summary>
       public hold() : base(Hold) { }
     }
 
+    /// <summary>BQL constant for the open status.</summary>
+    /// <remarks>Autor: Jose Vivanco; GitHub: josvmora; Fecha: Octubre 2026.</remarks>
     public class open : PX.Data.BQL.BqlString.Constant<open>
     {
+      /// <summary>Initializes the constant with the open status value.</summary>
       public open() : base(Open) { }
     }
 
+    /// <summary>BQL constant for the dispatching status.</summary>
+    /// <remarks>Autor: Jose Vivanco; GitHub: josvmora; Fecha: Octubre 2026.</remarks>
     public class dispatching : PX.Data.BQL.BqlString.Constant<dispatching>
     {
+      /// <summary>Initializes the constant with the dispatching status value.</summary>
       public dispatching() : base(Dispatching) { }
     }
 
+    /// <summary>BQL constant for the completed status.</summary>
+    /// <remarks>Autor: Jose Vivanco; GitHub: josvmora; Fecha: Octubre 2026.</remarks>
     public class completed : PX.Data.BQL.BqlString.Constant<completed>
     {
+      /// <summary>Initializes the constant with the completed status value.</summary>
       public completed() : base(Completed) { }
     }
 
+    /// <summary>BQL constant for the cancelled status.</summary>
+    /// <remarks>Autor: Jose Vivanco; GitHub: josvmora; Fecha: Octubre 2026.</remarks>
     public class cancelled : PX.Data.BQL.BqlString.Constant<cancelled>
     {
+      /// <summary>Initializes the constant with the cancelled status value.</summary>
       public cancelled() : base(Cancelled) { }
     }
 
+    /// <summary>Provides the status values and display labels for UI fields.</summary>
+    /// <remarks>Autor: Jose Vivanco; GitHub: josvmora; Fecha: Octubre 2026.</remarks>
     public class ListAttribute : PXStringListAttribute
     {
+      /// <summary>Initializes the selector with all dispatch statuses.</summary>
       public ListAttribute()
         : base(
           new string[] { Hold, Open, Dispatching, Completed, Cancelled },

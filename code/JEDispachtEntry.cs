@@ -11,6 +11,8 @@ using PX.Objects.IN;
 
 namespace PX.Objects.JE
 {
+    /// <summary>Manages dispatch documents, source orders, materials, and related inventory issues.</summary>
+    /// <remarks>Autor: Jose Vivanco; GitHub: josvmora; Fecha: Octubre 2026.</remarks>
     public partial class JEDispachtEntry : PXGraph<JEDispachtEntry, JEDispacht>
     {
         public PXSelect<JEDispacht> Document;
@@ -43,6 +45,7 @@ namespace PX.Objects.JE
         public PXSelect<JEDispachtAddRow,
             Where<JEDispachtAddRow.userID, Equal<Current<AccessInfo.userID>>>> AddRows;
 
+        /// <summary>Defaults the destination address from the selected project.</summary>
         protected virtual void JEDispacht_ShippingTo_FieldDefaulting(
             PXCache sender, PXFieldDefaultingEventArgs e)
         {
@@ -50,6 +53,7 @@ namespace PX.Objects.JE
             e.NewValue = GetProjectShippingAddress(row?.ProjectID);
         }
 
+        /// <summary>Prevents changing the project while the dispatch contains source documents.</summary>
         protected virtual void JEDispacht_ProjectID_FieldVerifying(
             PXCache sender, PXFieldVerifyingEventArgs e)
         {
@@ -76,6 +80,7 @@ namespace PX.Objects.JE
             }
         }
 
+        /// <summary>Refreshes the destination address when the project changes.</summary>
         protected virtual void JEDispacht_ProjectID_FieldUpdated(
             PXCache sender, PXFieldUpdatedEventArgs e)
         {
@@ -83,6 +88,9 @@ namespace PX.Objects.JE
             sender.SetDefaultExt<JEDispacht.shippingTo>(e.Row);
         }
 
+        /// <summary>Builds a formatted shipping address from the project's site address.</summary>
+        /// <param name="projectID">The project identifier.</param>
+        /// <returns>The formatted address, or <see langword="null"/> when no address is available.</returns>
         private string GetProjectShippingAddress(int? projectID)
         {
             if (projectID == null)
@@ -110,6 +118,7 @@ namespace PX.Objects.JE
             return parts.Count == 0 ? null : string.Join(", ", parts);
         }
 
+        /// <summary>Supplies the selected project's description for the dispatch title.</summary>
         protected virtual void JEDispacht_ProjectName_FieldSelecting(
             PXCache sender, PXFieldSelectingEventArgs e)
         {
@@ -124,6 +133,7 @@ namespace PX.Objects.JE
             e.ReturnValue = project?.Description;
         }
 
+        /// <summary>Calculates the visible sequential line number without changing the stored key.</summary>
         protected virtual void JEDispachtLine_DisplayLineNbr_FieldSelecting(
             PXCache sender, PXFieldSelectingEventArgs e)
         {
@@ -147,6 +157,7 @@ namespace PX.Objects.JE
             e.ReturnValue = position;
         }
 
+        /// <summary>Loads material snapshots after a source order is added.</summary>
         protected virtual void JEDispachtLine_RowInserted(PXCache sender, PXRowInsertedEventArgs e)
         {
             LoadOrderMaterials((JEDispachtLine)e.Row);
@@ -154,6 +165,7 @@ namespace PX.Objects.JE
             Materials.View.RequestRefresh();
         }
 
+        /// <summary>Removes material snapshots when their source order is removed.</summary>
         protected virtual void JEDispachtLine_RowDeleted(PXCache sender, PXRowDeletedEventArgs e)
         {
             var deleted = (JEDispachtLine)e.Row;
@@ -164,6 +176,7 @@ namespace PX.Objects.JE
             Materials.View.RequestRefresh();
         }
 
+        /// <summary>Assigns the next dispatch number and updates unsaved child lines.</summary>
         protected virtual void JEDispacht_RowPersisting(PXCache sender, PXRowPersistingEventArgs e)
         {
             JEDispacht document = (JEDispacht)e.Row;
@@ -181,6 +194,8 @@ namespace PX.Objects.JE
             }
         }
 
+        /// <summary>Generates the next sequential dispatch number.</summary>
+        /// <returns>A dispatch number with the <c>DSP</c> prefix.</returns>
         private string GetNextDispachtNbr()
         {
             JEDispacht maxRec = PXSelectGroupBy<JEDispacht, Aggregate<Max<JEDispacht.dispachtNbr>>>.Select(this);
@@ -191,6 +206,7 @@ namespace PX.Objects.JE
             return "DSP" + nextNbr.ToString("D6");
         }
 
+        /// <summary>Rebuilds the Add Documents selection rows using the current filter.</summary>
         protected virtual void LoadAddRows()
         {
             JEDispachtAddFilter filter = AddFilter.Current;
@@ -268,6 +284,9 @@ namespace PX.Objects.JE
 
         }
 
+        /// <summary>Validates that a selected source order is eligible for this dispatch.</summary>
+        /// <param name="row">The candidate source order.</param>
+        /// <returns>An error message when the order is ineligible; otherwise <see langword="null"/>.</returns>
         private string GetOrderSelectionError(JEDispachtAddRow row)
         {
             bool completed = false;
@@ -295,6 +314,7 @@ namespace PX.Objects.JE
                 row.DocType, row.OrderNbr);
         }
 
+        /// <summary>Validates a source order when the user selects it in the dialog.</summary>
         protected virtual void JEDispachtAddRow_Selected_FieldUpdated(PXCache sender, PXFieldUpdatedEventArgs e)
         {
             var row = e.Row as JEDispachtAddRow;
@@ -315,6 +335,7 @@ namespace PX.Objects.JE
             sender.RaiseExceptionHandling<JEDispachtAddRow.selected>(row, true, null);
         }
 
+        /// <summary>Refreshes the source-order choices after the document type changes.</summary>
         protected virtual void JEDispachtAddFilter_DocType_FieldUpdated(PXCache sender, PXFieldUpdatedEventArgs e)
         {
             AddFilter.Current.OrderNbr = null;
@@ -322,6 +343,7 @@ namespace PX.Objects.JE
             AddRows.View.RequestRefresh();
         }
 
+        /// <summary>Refreshes the source-order choices after the order-number filter changes.</summary>
         protected virtual void JEDispachtAddFilter_OrderNbr_FieldUpdated(PXCache sender, PXFieldUpdatedEventArgs e)
         {
             LoadAddRows();
@@ -330,6 +352,9 @@ namespace PX.Objects.JE
 
         #region Actions
 
+        /// <summary>Determines whether a dispatch is persisted and not pending deletion.</summary>
+        /// <param name="row">The dispatch to inspect.</param>
+        /// <returns><see langword="true"/> if the dispatch is saved and active in the cache.</returns>
         private bool IsSavedDispatch(JEDispacht row)
         {
             if (row == null || string.IsNullOrWhiteSpace(row.DispachtNbr))
@@ -341,6 +366,7 @@ namespace PX.Objects.JE
                 && status != PXEntryStatus.Deleted;
         }
 
+        /// <summary>Updates field editability and action availability for the selected dispatch.</summary>
         protected virtual void JEDispacht_RowSelected(PXCache sender, PXRowSelectedEventArgs e)
         {
             var row = e.Row as JEDispacht;
@@ -393,6 +419,7 @@ namespace PX.Objects.JE
         [PXButton(CommitChanges = true, DisplayOnMainToolbar = true, Category = "Processing")]
         [PXUIField(DisplayName = "Remove Hold", MapEnableRights = PXCacheRights.Update,
             MapViewRights = PXCacheRights.Select)]
+        /// <summary>Changes an eligible dispatch from on hold to open.</summary>
         protected virtual IEnumerable removeHold(PXAdapter adapter)
         {
             return ChangeDispatchStatus(adapter, JEDispachtStatus.Open, JEDispachtStatus.Hold);
@@ -402,6 +429,7 @@ namespace PX.Objects.JE
         [PXButton(CommitChanges = true, DisplayOnMainToolbar = false, Category = "Processing")]
         [PXUIField(DisplayName = "Put on Hold", MapEnableRights = PXCacheRights.Update,
             MapViewRights = PXCacheRights.Select)]
+        /// <summary>Places an eligible dispatch on hold.</summary>
         protected virtual IEnumerable putOnHold(PXAdapter adapter)
         {
             return ChangeDispatchStatus(adapter, JEDispachtStatus.Hold,
@@ -413,6 +441,7 @@ namespace PX.Objects.JE
             Connotation = PX.Data.WorkflowAPI.ActionConnotation.Danger)]
         [PXUIField(DisplayName = "Undo Dispatch", MapEnableRights = PXCacheRights.Update,
             MapViewRights = PXCacheRights.Select)]
+        /// <summary>Deletes eligible linked issues and returns the dispatch to hold.</summary>
         protected virtual IEnumerable undoDispatch(PXAdapter adapter)
         {
             return UndoDispatchIssues(adapter);
@@ -423,12 +452,18 @@ namespace PX.Objects.JE
             Connotation = PX.Data.WorkflowAPI.ActionConnotation.Danger)]
         [PXUIField(DisplayName = "Cancel Dispatch", MapEnableRights = PXCacheRights.Update,
             MapViewRights = PXCacheRights.Select)]
+        /// <summary>Cancels an open dispatch that has no linked inventory issues.</summary>
         protected virtual IEnumerable cancelDispatch(PXAdapter adapter)
         {
             return ChangeDispatchStatus(adapter, JEDispachtStatus.Cancelled,
                 JEDispachtStatus.Open);
         }
 
+        /// <summary>Changes the status of the current dispatch after validating its prior state.</summary>
+        /// <param name="adapter">The action adapter.</param>
+        /// <param name="target">The status to apply.</param>
+        /// <param name="allowed">The statuses from which the transition is permitted.</param>
+        /// <returns>The current dispatch row after the update.</returns>
         private IEnumerable ChangeDispatchStatus(PXAdapter adapter, string target, params string[] allowed)
         {
             var row = Document.Current;
@@ -468,6 +503,7 @@ namespace PX.Objects.JE
         [PXButton(CommitChanges = true, DisplayOnMainToolbar = false, Category = "Printing and Emailing")]
         [PXUIField(DisplayName = "Print Dispatch",
             MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
+        /// <summary>Persists and opens the dispatch report for the current record.</summary>
         protected virtual IEnumerable printDispatch(PXAdapter adapter)
         {
             if (Document.Current == null)
@@ -494,6 +530,7 @@ namespace PX.Objects.JE
             };
         }
 
+        /// <summary>Ensures that only an on-hold dispatch without issues can be edited.</summary>
         private void EnsureDispatchEditable()
         {
             if (Document.Current?.Status != JEDispachtStatus.Hold || HasIssues())
@@ -503,6 +540,7 @@ namespace PX.Objects.JE
         public PXAction<JEDispacht> AddDocument;
         [PXButton(CommitChanges = true, DisplayOnMainToolbar = false)]
         [PXUIField(DisplayName = "Add Documents")]
+        /// <summary>Opens the source-order selection dialog.</summary>
         protected virtual IEnumerable addDocument(PXAdapter adapter)
         {
             EnsureDispatchEditable();
@@ -520,12 +558,14 @@ namespace PX.Objects.JE
         public PXAction<JEDispacht> AddSelectedDocuments;
         [PXButton(CommitChanges = true, DisplayOnMainToolbar = false)]
         [PXUIField(DisplayName = "Add")]
+        /// <summary>Adds all checked source orders from the dialog.</summary>
         protected virtual IEnumerable addSelectedDocuments(PXAdapter adapter)
         {
             AddSelectedRows();
             return adapter.Get();
         }
 
+        /// <summary>Creates dispatch lines for selected source orders not already present.</summary>
         protected virtual void AddSelectedRows()
         {
             EnsureDispatchEditable();

@@ -5,6 +5,8 @@ using PX.Objects.IN;
 
 namespace PX.Objects.JE
 {
+    /// <summary>Links a dispatch to an inventory issue created for it.</summary>
+    /// <remarks>Autor: Jose Vivanco; GitHub: josvmora; Fecha: Octubre 2026.</remarks>
     [Serializable]
     [PXCacheName("Dispacht Issue")]
     public class JEDispachtIssue : PXBqlTable, IBqlTable
