@@ -1,0 +1,580 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report version="20211215" Name="report1">
+  <Filters>
+    <FilterExp>
+      <DataField>JEDispacht.DispachtNbr</DataField>
+      <Value>@DispatchNbr</Value>
+    </FilterExp>
+  </Filters>
+  <Parameters>
+    <ReportParameter>
+      <Name>DispatchNbr</Name>
+      <Nullable>True</Nullable>
+      <Prompt>Dispatch Number</Prompt>
+      <Required>True</Required>
+    </ReportParameter>
+  </Parameters>
+  <Relations>
+    <ReportRelation>
+      <ChildName>JEINDispachtMaterial</ChildName>
+      <Links>
+        <RelationRow>
+          <ChildField>DispachtNbr</ChildField>
+          <ParentField>DispachtNbr</ParentField>
+        </RelationRow>
+      </Links>
+      <ParentName>JEDispacht</ParentName>
+    </ReportRelation>
+    <ReportRelation>
+      <ChildName>Branch</ChildName>
+      <JoinType>Inner</JoinType>
+      <Links>
+        <RelationRow>
+          <ChildField>BranchID</ChildField>
+          <ParentField>BranchID</ParentField>
+        </RelationRow>
+      </Links>
+      <ParentName>JEDispacht</ParentName>
+    </ReportRelation>
+  </Relations>
+  <SchemaUrl>http://localhost/KiryuinSatsuki</SchemaUrl>
+  <StylesTemplate>templateformexternal.rpx</StylesTemplate>
+  <Tables>
+    <ReportTable Name="JEDispacht">
+      <Fields>
+        <ReportField Name="BranchID"></ReportField>
+        <ReportField Name="BranchID_Branch_acctName"></ReportField>
+        <ReportField Name="BranchID_description"></ReportField>
+        <ReportField Name="BranchID_Segment1"></ReportField>
+        <ReportField Name="CarrierID"></ReportField>
+        <ReportField Name="CarrierID_BAccountR_acctName"></ReportField>
+        <ReportField Name="CarrierID_description"></ReportField>
+        <ReportField Name="CarrierID_Segment1"></ReportField>
+        <ReportField Name="CarrierID_Vendor_acctName"></ReportField>
+        <ReportField Name="CreatedByID"></ReportField>
+        <ReportField Name="CreatedByID_Creator_displayName"></ReportField>
+        <ReportField Name="CreatedByID_Creator_Username"></ReportField>
+        <ReportField Name="CreatedByID_description"></ReportField>
+        <ReportField Name="CreatedByScreenID"></ReportField>
+        <ReportField Name="CreatedDateTime">
+          <DataType>DateTime</DataType>
+        </ReportField>
+        <ReportField Name="CreatedDateTime_Day"></ReportField>
+        <ReportField Name="CreatedDateTime_Hour"></ReportField>
+        <ReportField Name="CreatedDateTime_Month"></ReportField>
+        <ReportField Name="CreatedDateTime_Quarter"></ReportField>
+        <ReportField Name="Descr"></ReportField>
+        <ReportField Name="DispachtDate">
+          <DataType>DateTime</DataType>
+        </ReportField>
+        <ReportField Name="DispachtDate_Day"></ReportField>
+        <ReportField Name="DispachtDate_Hour"></ReportField>
+        <ReportField Name="DispachtDate_Month"></ReportField>
+        <ReportField Name="DispachtDate_Quarter"></ReportField>
+        <ReportField Name="DispachtNbr"></ReportField>
+        <ReportField Name="DropoffDate">
+          <DataType>DateTime</DataType>
+        </ReportField>
+        <ReportField Name="DropoffDate_Day"></ReportField>
+        <ReportField Name="DropoffDate_Hour"></ReportField>
+        <ReportField Name="DropoffDate_Month"></ReportField>
+        <ReportField Name="DropoffDate_Quarter"></ReportField>
+        <ReportField Name="LastModifiedByID"></ReportField>
+        <ReportField Name="LastModifiedByID_description"></ReportField>
+        <ReportField Name="LastModifiedByID_Modifier_displayName"></ReportField>
+        <ReportField Name="LastModifiedByID_Modifier_Username"></ReportField>
+        <ReportField Name="LastModifiedByScreenID"></ReportField>
+        <ReportField Name="LastModifiedDateTime">
+          <DataType>DateTime</DataType>
+        </ReportField>
+        <ReportField Name="LastModifiedDateTime_Day"></ReportField>
+        <ReportField Name="LastModifiedDateTime_Hour"></ReportField>
+        <ReportField Name="LastModifiedDateTime_Month"></ReportField>
+        <ReportField Name="LastModifiedDateTime_Quarter"></ReportField>
+        <ReportField Name="NoteActivity"></ReportField>
+        <ReportField Name="NoteFiles"></ReportField>
+        <ReportField Name="NoteID">
+          <DataType>Object</DataType>
+        </ReportField>
+        <ReportField Name="NoteImages"></ReportField>
+        <ReportField Name="NoteText"></ReportField>
+        <ReportField Name="PickupDate">
+          <DataType>DateTime</DataType>
+        </ReportField>
+        <ReportField Name="PickupDate_Day"></ReportField>
+        <ReportField Name="PickupDate_Hour"></ReportField>
+        <ReportField Name="PickupDate_Month"></ReportField>
+        <ReportField Name="PickupDate_Quarter"></ReportField>
+        <ReportField Name="ProjectID"></ReportField>
+        <ReportField Name="ProjectID_description"></ReportField>
+        <ReportField Name="ProjectID_PMProject_description"></ReportField>
+        <ReportField Name="ProjectName"></ReportField>
+        <ReportField Name="ShipDate">
+          <DataType>DateTime</DataType>
+        </ReportField>
+        <ReportField Name="ShipDate_Day"></ReportField>
+        <ReportField Name="ShipDate_Hour"></ReportField>
+        <ReportField Name="ShipDate_Month"></ReportField>
+        <ReportField Name="ShipDate_Quarter"></ReportField>
+        <ReportField Name="ShippingTo"></ReportField>
+        <ReportField Name="Status"></ReportField>
+        <ReportField Name="Tstamp"></ReportField>
+      </Fields>
+      <FullName>PX.Objects.JE.JEDispacht</FullName>
+    </ReportTable>
+    <ReportTable Name="JEINDispachtMaterial">
+      <Fields>
+        <ReportField Name="AvailableQty">
+          <DataType>Decimal</DataType>
+        </ReportField>
+        <ReportField Name="CostCodeID">
+          <DataType>Int32</DataType>
+        </ReportField>
+        <ReportField Name="CreatedByID"></ReportField>
+        <ReportField Name="CreatedByID_Creator_displayName"></ReportField>
+        <ReportField Name="CreatedByID_Creator_Username"></ReportField>
+        <ReportField Name="CreatedByID_description"></ReportField>
+        <ReportField Name="CreatedDateTime">
+          <DataType>DateTime</DataType>
+        </ReportField>
+        <ReportField Name="CreatedDateTime_Day"></ReportField>
+        <ReportField Name="CreatedDateTime_Hour"></ReportField>
+        <ReportField Name="CreatedDateTime_Month"></ReportField>
+        <ReportField Name="CreatedDateTime_Quarter"></ReportField>
+        <ReportField Name="Descr"></ReportField>
+        <ReportField Name="DispachtLineNbr">
+          <DataType>Int32</DataType>
+        </ReportField>
+        <ReportField Name="DispachtNbr"></ReportField>
+        <ReportField Name="DispatchQty">
+          <DataType>Decimal</DataType>
+        </ReportField>
+        <ReportField Name="DocType"></ReportField>
+        <ReportField Name="InventoryID"></ReportField>
+        <ReportField Name="InventoryID_description"></ReportField>
+        <ReportField Name="InventoryID_InventoryItem_descr"></ReportField>
+        <ReportField Name="LastModifiedByID"></ReportField>
+        <ReportField Name="LastModifiedByID_description"></ReportField>
+        <ReportField Name="LastModifiedByID_Modifier_displayName"></ReportField>
+        <ReportField Name="LastModifiedByID_Modifier_Username"></ReportField>
+        <ReportField Name="LastModifiedDateTime">
+          <DataType>DateTime</DataType>
+        </ReportField>
+        <ReportField Name="LastModifiedDateTime_Day"></ReportField>
+        <ReportField Name="LastModifiedDateTime_Hour"></ReportField>
+        <ReportField Name="LastModifiedDateTime_Month"></ReportField>
+        <ReportField Name="LastModifiedDateTime_Quarter"></ReportField>
+        <ReportField Name="LocationID"></ReportField>
+        <ReportField Name="OrderNbr"></ReportField>
+        <ReportField Name="OrderType"></ReportField>
+        <ReportField Name="Qty">
+          <DataType>Decimal</DataType>
+        </ReportField>
+        <ReportField Name="SiteID"></ReportField>
+        <ReportField Name="SourceLineNbr">
+          <DataType>Int32</DataType>
+        </ReportField>
+        <ReportField Name="SubItemID">
+          <DataType>Int32</DataType>
+        </ReportField>
+        <ReportField Name="TaskID">
+          <DataType>Int32</DataType>
+        </ReportField>
+        <ReportField Name="Tstamp"></ReportField>
+        <ReportField Name="UOM"></ReportField>
+      </Fields>
+      <FullName>PX.Objects.JE.JEINDispachtMaterial</FullName>
+    </ReportTable>
+    <ReportTable Name="Branch">
+      <Fields>
+        <ReportField Name="AcctMapNbr">
+          <DataType>Int32</DataType>
+        </ReportField>
+        <ReportField Name="AcctName"></ReportField>
+        <ReportField Name="Active">
+          <DataType>Boolean</DataType>
+        </ReportField>
+        <ReportField Name="BAccountID">
+          <DataType>Int32</DataType>
+        </ReportField>
+        <ReportField Name="BaseCuryID"></ReportField>
+        <ReportField Name="BranchCD"></ReportField>
+        <ReportField Name="BranchCD_Segment1"></ReportField>
+        <ReportField Name="BranchID">
+          <DataType>Int32</DataType>
+        </ReportField>
+        <ReportField Name="BranchOrOrganizationLogoNameReport"></ReportField>
+        <ReportField Name="CarrierFacility"></ReportField>
+        <ReportField Name="CEmail"></ReportField>
+        <ReportField Name="CFSFiler">
+          <DataType>Boolean</DataType>
+        </ReportField>
+        <ReportField Name="ContactName"></ReportField>
+        <ReportField Name="CountryID"></ReportField>
+        <ReportField Name="CountryID_Country_description"></ReportField>
+        <ReportField Name="CountryID_description"></ReportField>
+        <ReportField Name="CTelNumber"></ReportField>
+        <ReportField Name="DefaultPrinterID">
+          <DataType>Object</DataType>
+        </ReportField>
+        <ReportField Name="DefaultPrinterID_description"></ReportField>
+        <ReportField Name="DefaultPrinterID_SMPrinter_printerName"></ReportField>
+        <ReportField Name="ForeignEntity">
+          <DataType>Boolean</DataType>
+        </ReportField>
+        <ReportField Name="GroupMask">
+          <DataType>Object</DataType>
+        </ReportField>
+        <ReportField Name="Included">
+          <DataType>Boolean</DataType>
+        </ReportField>
+        <ReportField Name="LedgerCD"></ReportField>
+        <ReportField Name="LedgerID"></ReportField>
+        <ReportField Name="LedgerID_description"></ReportField>
+        <ReportField Name="LedgerID_Ledger_descr"></ReportField>
+        <ReportField Name="LogoName"></ReportField>
+        <ReportField Name="LogoNameReport"></ReportField>
+        <ReportField Name="MainLogoName"></ReportField>
+        <ReportField Name="NameControl"></ReportField>
+        <ReportField Name="OrganizationID"></ReportField>
+        <ReportField Name="OrganizationID_description"></ReportField>
+        <ReportField Name="OrganizationID_Organization_organizationName"></ReportField>
+        <ReportField Name="OrganizationID_Segment1"></ReportField>
+        <ReportField Name="OrganizationLogoNameReport"></ReportField>
+        <ReportField Name="OverrideThemeVariables">
+          <DataType>Boolean</DataType>
+        </ReportField>
+        <ReportField Name="ParentBranchID">
+          <DataType>Int32</DataType>
+        </ReportField>
+        <ReportField Name="PhoneMask"></ReportField>
+        <ReportField Name="Reporting1099">
+          <DataType>Boolean</DataType>
+        </ReportField>
+        <ReportField Name="RoleName"></ReportField>
+        <ReportField Name="RoleName_description"></ReportField>
+        <ReportField Name="RoleName_Roles_descr"></ReportField>
+        <ReportField Name="Secured">
+          <DataType>Boolean</DataType>
+        </ReportField>
+        <ReportField Name="TCC"></ReportField>
+        <ReportField Name="tstamp"></ReportField>
+      </Fields>
+      <FullName>PX.Objects.GL.Branch</FullName>
+    </ReportTable>
+  </Tables>
+  <Version>20211215</Version>
+  <ViewerFields>
+    <ViewerField Name="JEDispacht.DispachtNbr"></ViewerField>
+  </ViewerFields>
+  <Width>23.93619cm</Width>
+  <Sections>
+    <PageHeader Name="pageHeaderSection1">
+      <Expanded>True</Expanded>
+      <Height>0.21164cm</Height>
+    </PageHeader>
+    <Detail Name="detailSection1">
+      <Expanded>True</Expanded>
+      <Height>0.42328cm</Height>
+      <Items>
+        <TextBox Name="textBox11">
+          <CanGrow>True</CanGrow>
+          <Location>600px, 0px</Location>
+          <Size>136px, 16px</Size>
+          <StyleName>Normal</StyleName>
+          <Value>=Concat([JEINDispachtMaterial.SiteID], ' - ',[JEINDispachtMaterial.LocationID] )</Value>
+        </TextBox>
+        <TextBox Name="textBox19">
+          <Location>784px, 0px</Location>
+          <Size>56px, 16px</Size>
+          <Style>
+            <TextAlign>Center</TextAlign>
+          </Style>
+          <StyleName>Normal</StyleName>
+          <Value>=[JEINDispachtMaterial.Qty]</Value>
+        </TextBox>
+        <TextBox Name="textBox22">
+          <CanGrow>True</CanGrow>
+          <Location>264px, 0px</Location>
+          <Size>336px, 16px</Size>
+          <StyleName>Normal</StyleName>
+          <Value>=[JEINDispachtMaterial.Descr]</Value>
+        </TextBox>
+        <TextBox Name="textBox28">
+          <Location>736px, 0px</Location>
+          <Size>48px, 16px</Size>
+          <Style>
+            <TextAlign>Center</TextAlign>
+          </Style>
+          <StyleName>Normal</StyleName>
+          <Value>=[JEINDispachtMaterial.UOM]</Value>
+        </TextBox>
+        <TextBox Name="textBox7">
+          <Location>0px, 0px</Location>
+          <Size>88px, 16px</Size>
+          <Style>
+            <TextAlign>Left</TextAlign>
+          </Style>
+          <StyleName>Normal</StyleName>
+          <Value>=[JEINDispachtMaterial.DocType]</Value>
+        </TextBox>
+        <TextBox Name="textBox74">
+          <Location>176px, 0px</Location>
+          <Size>88px, 16px</Size>
+          <Style>
+            <TextAlign>Left</TextAlign>
+          </Style>
+          <StyleName>Normal</StyleName>
+          <Value>=[JEINDispachtMaterial.InventoryID]</Value>
+        </TextBox>
+        <TextBox Name="textBox8">
+          <Location>88px, 0px</Location>
+          <Size>88px, 16px</Size>
+          <Style>
+            <TextAlign>Center</TextAlign>
+          </Style>
+          <StyleName>Normal</StyleName>
+          <Value>=[JEINDispachtMaterial.OrderNbr]</Value>
+        </TextBox>
+        <TextBox Name="textBox9">
+          <Location>840px, 0px</Location>
+          <Size>64px, 16px</Size>
+          <Style>
+            <TextAlign>Center</TextAlign>
+          </Style>
+          <StyleName>Normal</StyleName>
+          <Value>=[JEINDispachtMaterial.DispatchQty]</Value>
+        </TextBox>
+      </Items>
+    </Detail>
+    <PageFooter Name="pageFooterSection1">
+      <Expanded>True</Expanded>
+      <Height>0.42328cm</Height>
+      <Items>
+        <TextBox Name="textBox41">
+          <Location>800px, 0px</Location>
+          <Size>120px, 16px</Size>
+          <Style>
+            <TextAlign>Right</TextAlign>
+          </Style>
+          <StyleName>Normal</StyleName>
+          <Value>='Page: ' + [PageOf]</Value>
+        </TextBox>
+      </Items>
+    </PageFooter>
+  </Sections>
+  <Items></Items>
+  <Groups>
+    <Group Name="groupInvoice">
+      <Headers>
+        <Header Name="groupHeaderSection1">
+          <Expanded>True</Expanded>
+          <Height>6.77249cm</Height>
+          <Items>
+            <PictureBox Name="pictureBox1">
+              <Location>0px, 0px</Location>
+              <MimeType>image/gif</MimeType>
+              <QRCodeSettings></QRCodeSettings>
+              <Size>104px, 100px</Size>
+              <Source>Database</Source>
+              <Value>=[Branch.BranchOrOrganizationLogoNameReport]</Value>
+            </PictureBox>
+            <TextBox Name="textBox1">
+              <Location>640px, 0px</Location>
+              <Size>264px, 32px</Size>
+              <StyleName>Document Name</StyleName>
+              <Value>Dispatch</Value>
+            </TextBox>
+            <TextBox Name="textBox20">
+              <Location>336px, 216px</Location>
+              <Size>152px, 16px</Size>
+              <StyleName>Heading1BCColored</StyleName>
+              <Value>PICK UP DATE</Value>
+            </TextBox>
+            <TextBox Name="textBox24">
+              <Location>0px, 232px</Location>
+              <Size>168px, 15px</Size>
+              <StyleName>Normal</StyleName>
+              <Value>=[JEDispacht.CarrierID_description]</Value>
+            </TextBox>
+            <TextBox Name="textBox25">
+              <Location>336px, 232px</Location>
+              <Size>152px, 15px</Size>
+              <StyleName>Normal</StyleName>
+              <Value>=[JEDispacht.PickupDate]</Value>
+            </TextBox>
+            <TextBox Name="textBox29">
+              <Location>640px, 40px</Location>
+              <Size>80px, 16px</Size>
+              <StyleName>Heading 1</StyleName>
+              <Value>Dispatch No.:</Value>
+            </TextBox>
+            <TextBox Name="textBox3">
+              <Location>720px, 56px</Location>
+              <Size>184px, 16px</Size>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+              <StyleName>Normal</StyleName>
+              <Value>=[JEDispacht.DispachtDate]</Value>
+            </TextBox>
+            <TextBox Name="textBox30">
+              <Location>640px, 56px</Location>
+              <Size>80px, 16px</Size>
+              <StyleName>Heading 1</StyleName>
+              <Value>Dispatch Date:</Value>
+            </TextBox>
+            <TextBox Name="textBox4">
+              <Location>720px, 40px</Location>
+              <Size>184px, 16px</Size>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+              <StyleName>Heading 1</StyleName>
+              <Value>=[JEDispacht.DispachtNbr]</Value>
+            </TextBox>
+            <TextBox Name="textBox42">
+              <Location>168px, 216px</Location>
+              <Size>168px, 16px</Size>
+              <StyleName>Heading1BCColored</StyleName>
+              <Value>DROP OFF DATE</Value>
+            </TextBox>
+            <TextBox Name="textBox43">
+              <Location>168px, 232px</Location>
+              <Size>168px, 15px</Size>
+              <StyleName>Normal</StyleName>
+              <Value>=[JEDispacht.DropoffDate]</Value>
+            </TextBox>
+            <TextBox Name="textBox44">
+              <Location>0px, 216px</Location>
+              <Size>168px, 16px</Size>
+              <StyleName>Heading1BCColored</StyleName>
+              <Value>SHIP VIA</Value>
+            </TextBox>
+            <TextBox Name="textBox45">
+              <Location>0px, 168px</Location>
+              <Size>336px, 40px</Size>
+              <StyleName>RecepientCompany</StyleName>
+              <Value>=Concat(IsNull([JEDispacht.ProjectID_description], ''), '{br}', IsNull([JEDispacht.ShippingTo], ''))</Value>
+            </TextBox>
+            <TextBox Name="textBox49">
+              <Location>0px, 152px</Location>
+              <Size>336px, 16px</Size>
+              <StyleName>Heading1BCColored</StyleName>
+              <Value>SHIP TO:</Value>
+            </TextBox>
+            <TextBox Name="textBox57">
+              <Location>640px, 72px</Location>
+              <Size>80px, 16px</Size>
+              <StyleName>Heading 1</StyleName>
+              <Value>Project No.:</Value>
+            </TextBox>
+            <TextBox Name="textBox58">
+              <Location>720px, 72px</Location>
+              <Size>184px, 16px</Size>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+              <StyleName>Normal</StyleName>
+              <Value>=[JEDispacht.ProjectID]</Value>
+            </TextBox>
+            <TextBox Name="textBox62">
+              <Location>640px, 88px</Location>
+              <Size>80px, 16px</Size>
+              <StyleName>Heading 1</StyleName>
+              <Value>Create by:</Value>
+            </TextBox>
+            <TextBox Name="textBox72">
+              <Location>720px, 88px</Location>
+              <Size>184px, 16px</Size>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+              <StyleName>Normal</StyleName>
+              <Value>=[JEDispacht.CreatedByID_description]</Value>
+            </TextBox>
+          </Items>
+        </Header>
+        <Header Name="groupHeaderSection2">
+          <Expanded>True</Expanded>
+          <Height>0.42328cm</Height>
+          <PrintOnEveryPage>True</PrintOnEveryPage>
+          <Items>
+            <TextBox Name="textBox10">
+              <Location>600px, 0px</Location>
+              <Size>136px, 16px</Size>
+              <StyleName>Heading1BCColoredRightBorder</StyleName>
+              <Value>ITEM</Value>
+            </TextBox>
+            <TextBox Name="textBox14">
+              <Location>264px, 0px</Location>
+              <Size>336px, 16px</Size>
+              <StyleName>Heading1BCColoredRightBorder</StyleName>
+              <Value>ITEM</Value>
+            </TextBox>
+            <TextBox Name="textBox17">
+              <Location>784px, 0px</Location>
+              <Size>56px, 16px</Size>
+              <Style>
+                <TextAlign>Center</TextAlign>
+              </Style>
+              <StyleName>Heading1BCColoredRightBorder</StyleName>
+              <Value>Order Qty.</Value>
+            </TextBox>
+            <TextBox Name="textBox2">
+              <Location>840px, 0px</Location>
+              <Size>64px, 16px</Size>
+              <Style>
+                <TextAlign>Center</TextAlign>
+              </Style>
+              <StyleName>Heading1BCColoredRightBorder</StyleName>
+              <Value>Dispacth Qty.</Value>
+            </TextBox>
+            <TextBox Name="textBox21">
+              <Location>736px, 0px</Location>
+              <Size>48px, 16px</Size>
+              <Style>
+                <TextAlign>Center</TextAlign>
+              </Style>
+              <StyleName>Heading1BCColoredRightBorder</StyleName>
+              <Value>UOM</Value>
+            </TextBox>
+            <TextBox Name="textBox5">
+              <Location>0px, 0px</Location>
+              <Size>88px, 16px</Size>
+              <Style>
+                <TextAlign>Left</TextAlign>
+              </Style>
+              <StyleName>Heading1BCColoredRightBorder</StyleName>
+              <Value>ORDER</Value>
+            </TextBox>
+            <TextBox Name="textBox6">
+              <Location>88px, 0px</Location>
+              <Size>88px, 16px</Size>
+              <Style>
+                <TextAlign>Center</TextAlign>
+              </Style>
+              <StyleName>Heading1BCColoredRightBorder</StyleName>
+              <Value>ORDER Nbr</Value>
+            </TextBox>
+            <TextBox Name="textBox68">
+              <Location>176px, 0px</Location>
+              <Size>88px, 16px</Size>
+              <Style>
+                <TextAlign>Center</TextAlign>
+              </Style>
+              <StyleName>Heading1BCColoredRightBorder</StyleName>
+              <Value>INVENTORY ID</Value>
+            </TextBox>
+          </Items>
+        </Header>
+      </Headers>
+      <Footers>
+        <Footer Name="groupFooterSection1">
+          <Expanded>True</Expanded>
+          <Height>0.21164cm</Height>
+        </Footer>
+      </Footers>
+    </Group>
+  </Groups>
+</Report>

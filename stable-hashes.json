@@ -1,0 +1,46 @@
+[
+    {
+        "Path":  "C:\\webo\\AcumaticaDEV\\acumatica_borrador-main\\Dispacht\\code\\JEDispacht.cs",
+        "Hash":  "F3A545851D65AF31B7B1E4D8B4C375F1FFA77F28A1F913EAB74F3A71766E69F9"
+    },
+    {
+        "Path":  "C:\\webo\\AcumaticaDEV\\acumatica_borrador-main\\Dispacht\\code\\JEDispachtAddFilter.cs",
+        "Hash":  "19D1205E754759E8E84B511D7D5EBA3F465472CCAE37CFA2F7BF3CA04C40E0E3"
+    },
+    {
+        "Path":  "C:\\webo\\AcumaticaDEV\\acumatica_borrador-main\\Dispacht\\code\\JEDispachtEntry.cs",
+        "Hash":  "B64526DA9D4B6D3767FCF09062556BC466E290373A14AF0DAE5E7D83C4B8ABE5"
+    },
+    {
+        "Path":  "C:\\webo\\AcumaticaDEV\\acumatica_borrador-main\\Dispacht\\code\\JEDispachtInq.cs",
+        "Hash":  "07B4FFD3EF6E696A722F3AAFD6C0153589D46B441556BA5342181A8B7F493AD4"
+    },
+    {
+        "Path":  "C:\\webo\\AcumaticaDEV\\acumatica_borrador-main\\Dispacht\\code\\JEDispachtLine.cs",
+        "Hash":  "0FBE810BDD99C270ADD3AC266F43473B4B701D9C6E163C0AA8C6D2F39C64DAA4"
+    },
+    {
+        "Path":  "C:\\webo\\AcumaticaDEV\\acumatica_borrador-main\\Dispacht\\code\\JEINDispachtMaterial.cs",
+        "Hash":  "245A54C8AFA202595CDEBBA9B442A79902E707B4436D7CEE9A741724B35E3A5A"
+    },
+    {
+        "Path":  "C:\\webo\\AcumaticaDEV\\acumatica_borrador-main\\Dispacht\\screens\\JE401003.aspx",
+        "Hash":  "F64B36579DB98BF8230C0DC0B10C2B5A40D148A1D7122C69C330B50036B1E9A5"
+    },
+    {
+        "Path":  "C:\\webo\\AcumaticaDEV\\acumatica_borrador-main\\Dispacht\\screens\\JE401003.aspx.cs",
+        "Hash":  "E6A44E63F8FDD4FD0A71D9E8301A7F5998D04F13A75DFD4B5EE061E14B8BE41B"
+    },
+    {
+        "Path":  "C:\\webo\\AcumaticaDEV\\acumatica_borrador-main\\Dispacht\\screens\\JE401004.aspx",
+        "Hash":  "02CA36682A873A6909C0461F6A846809D3F20C8B7E8E5237DBE0F25004E4E166"
+    },
+    {
+        "Path":  "C:\\webo\\AcumaticaDEV\\acumatica_borrador-main\\Dispacht\\screens\\JE401004.aspx.cs",
+        "Hash":  "163774DE2E5E2AE2D8361790A26BCAA3A53EDF4A3C9878E51077FF778CFF57A6"
+    },
+    {
+        "Path":  "C:\\webo\\AcumaticaDEV\\acumatica_borrador-main\\Dispacht\\sql\\JEDispacht.sql",
+        "Hash":  "98A15698DB707DC816BA36D3220A314F0E4FB4092699FB5E822C1192FC67CAB6"
+    }
+]
